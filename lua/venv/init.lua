@@ -46,10 +46,10 @@ local function find_python_interpreter_venv(root)
 	return scan_dir(root)
 end
 
--- Update pyright to the new path and make it reload the configuration
-local function update_pyright_python_path(python_path)
+-- Update python server to the new path and make it reload the configuration
+local function update_python_server_path(python_path)
 	for _, client in pairs(vim.lsp.get_clients()) do
-		if client.name == "pyright" then
+		if client.name == "pyright" or client.name == "basedpyright" then
 			client.config.settings = client.config.settings or {}
 			client.config.settings.python = client.config.settings.python or {}
 			client.config.settings.python.pythonPath = python_path
@@ -173,7 +173,7 @@ function M.setup(opts)
 			end
 
 			vim.g.python3_host_prog = selected.path
-			update_pyright_python_path(selected.path)
+			update_python_server_path(selected.path)
 
 			local msg = ve and ("Venv python selected: " .. ve) or ("System Python selected: " .. selected.path)
 			vim.notify(msg, vim.log.levels.INFO, { title = "Venv" })
