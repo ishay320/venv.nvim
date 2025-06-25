@@ -113,8 +113,13 @@ local function select_python_interpreter(pythons, callback)
 	end
 end
 
+M.defaults = {}
+M.options = {}
+
 -- Setup function to create the Venv command
 function M.setup(opts)
+	M.options = vim.tbl_deep_extend("force", {}, M.defaults, opts or {})
+
 	vim.api.nvim_create_user_command("Venv", function()
 		local root = find_project_root() or vim.fn.getcwd()
 
